@@ -1,7 +1,20 @@
-FROM nginx:1.25-alpine
-# Copy your static site into the default NGINX root
-COPY . /usr/share/nginx/html/
-# Expose 80 because that's what NGINX listens on by default
-EXPOSE 80
-# Let docker run publish 90 externally: docker run -p 90:80
-CMD ["nginx", "-g", "daemon off;"]
+# Use the official Node.js image as a base
+FROM node:14
+
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Expose the port the app runs on
+EXPOSE 3000
+
+# Command to run the application
+CMD ["node", "server.js"]
