@@ -1,44 +1,69 @@
-version: '3.8'
-
+# Remove the version key; Compose V2 ignores it and shows a warning.
+# version: '3.8'
 services:
   app-pro:
-    build: 
+    build:
       context: .
-    container_name: app-pro
+    # container_name: app-pro    # optional; remove to allow scaling
     ports:
       - "82:3000"
+
+    # Use one of the two valid styles:
+
+    # A) Mapping (recommended)
     environment:
-      - NODE_ENV=production
-        PORT=3000 
-        MONGO_URI=mongodb://rootuser:rootpassword@rootuser:27017/hr_system?authSource=rootuser
-        DB_NAME=hr_system
+      NODE_ENV: production
+      PORT: "3000"
+      # Use the service name "data-base" as host; Mongo listens on 27017.
+      # For root user, authSource is typically 'admin'
+      MONGO_URI: "mongodb://rootuser:rootpassword@data-base:27017/hr_system?authSource=admin"
+      DB_NAME: "hr_system"
+
+    # OR B) List of KEY=VALUE strings (each on its own line)
+    # environment:
+    #   - NODE_ENV=production
+    #   - PORT=3000
+    #   - MONGO_URI=mongodb://rootuser:rootpassword@data-base:27017/hr_system?authSource=admin
+    #   - DB_NAME=hr_system
+
     depends_on:
-      - data-base
-    
+      data-base:
+        condition: service_healthy
+
+    networks:
+      - appnet
+
   data-base:
-    image: mongo
-    container_name: mongodb
+    image: mongo:6.0
+    # container_name: mongodb     # optional; internal DNS prefers the *service name*
     environment:
-      # MongoDB Authentication
-      MONGO_USERNAME=rootuser
-      MONGO_PASSWORD=rootpassword
+      # Required root credentials for the official mongo image
+      MONGO_INITDB_ROOT_USERNAME: rootuser
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+      # Optional: creates this DB on first run (no user by default)
+      MONGO_INITDB_DATABASE: hr_system
 
     ports:
-      - "3306:3306"
+      - "27017:27017"            # only needed if you want host access (e.g., mongo shell from host)
 
     volumes:
-      - data1:/var/lib/data1
+      - data1:/data/db           # correct Mongo data directory
+      # If you have init scripts, uncomment the next line:
+      # - ./mongo-init:/docker-entrypoint-initdb.d:ro
+
+    healthcheck:
+      # ping using mongosh; waits until Mongo actually accepts connections
+      test: ["CMD-SHELL", "mongosh --quiet -u \"$${MONGO_INITDB_ROOT_USERNAME}\" -p \"$${MONGO_INITDB_ROOT_PASSWORD}\" --eval 'db.runCommand({ ping: 1 })' || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+    networks:
+      - appnet
 
 volumes:
   data1: {}
 
-
-
-
-
-
-
-
-
-
-
+networks:
+  appnet: {}
