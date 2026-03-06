@@ -6,7 +6,7 @@ services:
       context: .
     # container_name: app-pro    # optional; remove to allow scaling
     ports:
-      - "82:3000"
+      - "82:80"
 
     # Use one of the two valid styles:
 
