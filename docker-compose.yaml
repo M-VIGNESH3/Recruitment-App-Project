@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  app-pro:
+    build: 
+      context: .
+    container_name: app-pro
+    ports:
+      - "82:3000"
+    environment:
+      - NODE_ENV=production
+        PORT=3000 
+        MONGO_URI=mongodb://rootuser:rootpassword@rootuser:27017/hr_system?authSource=rootuser
+        DB_NAME=hr_system
+    depends_on:
+      - data-base
+    
+  data-base:
+    image: mongo
+    container_name: mongodb
+    environment:
+      # MongoDB Authentication
+      MONGO_USERNAME=rootuser
+      MONGO_PASSWORD=rootpassword
+
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - data1:/var/lib/data1
+
+volumes:
+  data1: {}
+
+
+
+
+
+
+
+
+
+
+
