@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recruitment-app
+  namespace: recruitment
+  labels:
+    app: recruitment-app
+spec:
+  replicas: 3
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+
+  selector:
+    matchLabels:
+      app: recruitment-app
+
+  template:
+    metadata:
+      labels:
+        app: recruitment-app
+    spec:
+      containers:
+      - name: recruitment-app
+        image: your-dockerhub-username/recruitment-app:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
