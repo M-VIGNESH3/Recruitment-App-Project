@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
       - name: recruitment-app
-        image: your-dockerhub-username/recruitment-app:latest
+        image: vignesh8386/recruitment-app:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 5000
