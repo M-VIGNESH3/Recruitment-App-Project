@@ -8,6 +8,6 @@ spec:
     app: recruitment-app
   ports:
   - port: 80
-    targetPort: 5000
+    targetPort: 3000
     protocol: TCP
   type: NodePort
