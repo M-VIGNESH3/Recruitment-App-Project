@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
       - name: recruitment-app
-        image: vignesh8386/recruitment-app:latest
+        image: vignesh8386/recruitment-app:v1.1.0
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
