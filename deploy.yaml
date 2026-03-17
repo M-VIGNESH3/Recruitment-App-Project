@@ -35,7 +35,7 @@ spec:
         ports:
         - containerPort: 3000
         env:
-        - name: MONGO_URI
+        - name: MONGO_URL
           valuefrom:
             configMapKeyRef: 
               name: config
