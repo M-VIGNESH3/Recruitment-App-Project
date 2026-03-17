@@ -6,4 +6,5 @@ metadata:
 data:
   MONGO_URI: mongodb://mongodb-service:27017/recruitmentDB
   DB_NAME: recruitmentDB
+  NODE_ENV: production
  
