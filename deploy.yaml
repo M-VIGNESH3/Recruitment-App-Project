@@ -40,3 +40,8 @@ spec:
             configMapKeyRef: 
               name: config
               key: MONGO_URL
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: hr-app-config
+              key: DB_NAME
