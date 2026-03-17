@@ -43,5 +43,5 @@ spec:
         - name: DB_NAME
           valueFrom:
             configMapKeyRef:
-              name: hr-app-config
+              name: config
               key: DB_NAME
