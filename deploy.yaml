@@ -34,14 +34,6 @@ spec:
         image: vignesh8386/recruitment-app:v1.1.0
         ports:
         - containerPort: 3000
-        env:
-        - name: MONGO_URI
-          valueFrom:
-            configMapKeyRef: 
-              name: config
-              key: MONGO_URL
-        - name: DB_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: config
-              key: DB_NAME
+        envFrom:
+        - configMapRef:
+            name: recruitment-config
